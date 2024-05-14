@@ -1,3 +1,12 @@
+## Run the following steps before developing
+1. clone this repo
+2. run composer install
+3. copy .env.example as .env
+4. open .env file
+5. rename "APP_NAME" to SQA-EasyReport
+6. rename "DB_DATABASE" to SQA-EasyReport
+7. run php artisan key:generate
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
