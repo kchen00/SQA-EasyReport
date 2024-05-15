@@ -11,7 +11,7 @@ class StudentController extends Controller
     public function list()
     {
         $students = Student::paginate(10);
-        return view('pages.module_1.student_list')->with('students', $students);
+        return view('pages.ManageAccount.student_list')->with('students', $students);
     }
 
     public function view(int $student_id)
@@ -22,14 +22,14 @@ class StudentController extends Controller
         // Check if the student record exists
         if ($student) {
             // Student record found, return the view with the student data
-            return view('pages.module_1.student_view')->with("student", $student);
+            return view('pages.ManageAccount.student_view')->with("student", $student);
         }
         abort(404, "Student not found");
     }
 
     public function add()
     {
-        return view('pages.module_1.student_add');
+        return view('pages.ManageAccount.student_add');
     }
 
     public function store(Request $request)
