@@ -47,21 +47,16 @@ Route::get('/', function () {
 });
 
 
-Route::get("/student/list", [StudentController::class, "list"])
-    ->middleware("auth")
-    ->name("student.list");
-Route::get("/student/view/{student_id}", [StudentController::class, "view"])
-    ->middleware("auth")
-    ->name("student.view");
-Route::get("/student/add", [StudentController::class, "add"])
-    ->middleware("auth")
-    ->name("student.add");
-Route::post("/student/store", [StudentController::class, "store"])
-    ->middleware("auth")
-    ->name("student.store");
-Route::delete("/student/delete/{student_id}", [StudentController::class, "destroy"])
-    ->middleware("auth")
-    ->name("student.destroy");
+// manage account routes
+Route::middleware('auth')->group(function () {
+    Route::prefix('student')->group(function () {
+        Route::get('/list', [StudentController::class, 'list'])->name('student.list');
+        Route::get('/view/{student_id}', [StudentController::class, 'view'])->name('student.view');
+        Route::get('/add', [StudentController::class, 'add'])->name('student.add');
+        Route::post('/store', [StudentController::class, 'store'])->name('student.store');
+        Route::delete('/delete/{student_id}', [StudentController::class, 'destroy'])->name('student.destroy');
+    });
+});
 
 // manage class routes
 Route::middleware('auth')->group(function () {

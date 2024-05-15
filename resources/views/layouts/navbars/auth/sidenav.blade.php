@@ -28,7 +28,29 @@
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">Students</span>
+                    <span class="nav-link-text ms-1">
+                        @if (Str::startsWith(Route::currentRouteName(), 'student'))
+                            <strong>Manage Students</strong>
+                        @else
+                            Manage Students
+                        @endif
+                    </span>
+                </a>
+                <a class="nav-link {{ Route::currentRouteName() == 'student.list' ? 'active' : '' }}"
+                    href="{{ route('student.list') }}" role="button" aria-expanded="false">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-eye text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">View Students</span>
+                </a>
+                <a class="nav-link {{ Route::currentRouteName() == 'student.add' ? 'active' : '' }}"
+                    href="{{ route('student.add') }}" role="button" aria-expanded="false">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-person-plus-fill text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Register Student</span>
                 </a>
             </li>
             <li class="nav-item">
