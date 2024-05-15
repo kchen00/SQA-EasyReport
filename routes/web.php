@@ -23,6 +23,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
+use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\StudentController;
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -61,3 +62,14 @@ Route::post("/student/store", [StudentController::class, "store"])
 Route::delete("/student/delete/{student_id}", [StudentController::class, "destroy"])
     ->middleware("auth")
     ->name("student.destroy");
+
+// manage class routes
+Route::middleware('auth')->group(function () {
+    Route::get('/school_class/list', [SchoolClassController::class, 'list'])->name('school_class.list');
+    Route::get('/school_class/view/{class_id}', [SchoolClassController::class, 'view'])->name('school_class.view');
+    Route::get('/school_class/add', [SchoolClassController::class, 'add'])->name('school_class.add');
+    Route::get('/school_class/update/{class_id}', [SchoolClassController::class, 'update'])->name('school_class.update');
+    Route::post('/school_class/update/store/{class_id}', [SchoolClassController::class, 'update_store'])->name('school_class.update.store');
+    Route::post('/school_class/store', [SchoolClassController::class, 'store'])->name('school_class.store');
+    Route::delete('/school_class/delete/{class_id}', [SchoolClassController::class, 'destroy'])->name('school_class.destroy');
+});
