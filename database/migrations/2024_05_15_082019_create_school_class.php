@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('capacity');
             $table->unsignedBigInteger('class_teacher');
             $table->foreign('class_teacher')->references('id')->on('users');
-            $table->string('subject_offered');
             $table->timestamps();
         });
     }
