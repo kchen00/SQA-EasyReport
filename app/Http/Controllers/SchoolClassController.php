@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\SchoolClass;
-use App\Models\Subjects;
+use App\Models\Subject;
+use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -24,7 +26,8 @@ class SchoolClassController extends Controller
         // Check if the student record exists
         if ($class) {
             // class record found, return the view with the student data
-            return view('pages.ManageClass.class_view')->with("school_class", $class);
+            $class_teacher = User::find($class->class_teacher);
+            return view('pages.ManageClass.class_view')->with(["school_class"=>$class, "class_teacher"=>$class_teacher]);
         }
         abort(404, "class not found");
     }
@@ -37,15 +40,17 @@ class SchoolClassController extends Controller
         // Check if the student record exists
         if ($class) {
             // class record found, return the view with the student data
-            return view('pages.ManageClass.class_update')->with("school_class", $class);
+            $teachers = User::where("role", User::ROLE_TEACHER)->get();
+            return view('pages.ManageClass.class_update')->with(["school_class"=>$class, "teachers"=>$teachers]);
         }
         abort(404, "class not found");
     }
 
     public function add()
     {
-        $subjects = Subjects::all();
-        return view('pages.ManageClass.class_add')->with("subjects", $subjects);
+        $subjects = Subject::all();
+        $teachers = User::where("role", User::ROLE_TEACHER)->get();
+        return view('pages.ManageClass.class_add')->with(["subjects"=>$subjects, "teachers"=>$teachers]);
     }
 
     public function store(Request $request)
@@ -53,7 +58,7 @@ class SchoolClassController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:school_classes,name',
             'capacity' => 'required|integer|min:20|max:30',
-            'class_teacher' => 'required|string',
+            'class_teacher' => 'required',
             'subject_offered' => 'required|array|min:1',
         ]);
 
@@ -70,7 +75,7 @@ class SchoolClassController extends Controller
         $school_class->save();
 
 
-        return redirect()->route('school_class.add')->with('register_success', 'Class added successfully.');
+        return redirect()->route('school_class.add')->with('register_success', 'Class ' . $school_class->name .' added successfully.');
     }
 
     public function update_store(Request $request, int $class_id)
@@ -81,7 +86,7 @@ class SchoolClassController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required', Rule::unique("school_classes")->ignore($school_class->name),
             'capacity' => 'required|integer|min:20|max:30',
-            'class_teacher' => 'required|string',
+            'class_teacher' => 'required',
             'subject_offered' => 'required|string',
         ]);
 

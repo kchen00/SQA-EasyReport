@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Register New Class'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Update Class'])
     <div class="container-fluid py-4">
         <div class="card p-4">
             <div class="row">
@@ -34,8 +34,11 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="birth" class="form-label">Class teacher</label>
-                                    <input type="text" class="form-control" id="class_teacher" name="class_teacher"
-                                        value="{{ $school_class->class_teacher }}" placeholder="John Doe">
+                                    <select type="text" class="form-control" id="class_teacher" name="class_teacher">
+                                        @foreach ($teachers as $teacher)
+                                            <option value={{ $teacher->id }} {{ $teacher->id == $school_class->class_teacher ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('class_teacher')
                                         <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                     @enderror

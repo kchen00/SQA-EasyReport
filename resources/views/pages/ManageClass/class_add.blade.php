@@ -34,8 +34,12 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="birth" class="form-label">Class teacher</label>
-                                    <input type="text" class="form-control" id="class_teacher" name="class_teacher"
-                                        value="" placeholder="John Doe">
+                                    <select type="text" class="form-control" id="class_teacher" name="class_teacher">
+                                        <option value="Assign one class teacher" disabled selected hidden>Assign one class teacher</option>
+                                        @foreach ($teachers as $teacher)
+                                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                        @endforeach
+                                    </select>
                                     @error('class_teacher')
                                         <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                     @enderror
@@ -45,10 +49,12 @@
                                 <div class="mb-3">
                                     <p class="form-label">Subjects Offered</p>
                                     @foreach ($subjects as $subject)
-                                    <div class="form-check">
-                                        <input type="checkbox" name="subject_offered[]" class="form-check-input" id="{{ $subject->name }}" value="{{ $subject->id }}">
-                                        <label class="form-check-label" for="{{ $subject->name }}">{{ $subject->name }}</label>
-                                    </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="subject_offered[]" class="form-check-input"
+                                                id="{{ $subject->name }}" value="{{ $subject->id }}">
+                                            <label class="form-check-label"
+                                                for="{{ $subject->name }}">{{ $subject->name }}</label>
+                                        </div>
                                     @endforeach
 
                                     @error('subject_offered')
@@ -68,11 +74,12 @@
         </div>
     </div>
 
-    @if (Session::has('register_success'))
+    @if (Session('register_success'))
         <script>
             // Show modal when the page loads
             $(document).ready(function() {
                 $('#register_status').modal('show');
+                $('#register_status_text').text('{{ Session("register_success") }}');
             });
         </script>
     @endif
@@ -89,7 +96,7 @@
                     <span>
                         <i class="bi bi-check-circle-fill text-success display-6"></i>
                     </span>
-                    <p>Student registered successfully</p>
+                    <p id="register_status_text"></p>
                     <button type="button" class="btn bg-success rounded-pill px-6" data-bs-dismiss="modal">OK</button>
                 </div>
             </div>
