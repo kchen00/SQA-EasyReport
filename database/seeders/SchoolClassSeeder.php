@@ -17,8 +17,7 @@ class SchoolClassSeeder extends Seeder
             SchoolClass::create([
                 "name" => "Class " . $i,
                 "capacity" => rand(20, 30),
-                "class_teacher" => rand(2, 10),
-                "subject_offered" => "subject 1"
+                "class_teacher" => rand(2, 10)
             ]);
         }
 

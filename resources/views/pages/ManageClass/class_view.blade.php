@@ -54,8 +54,14 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="contact" class="form-label">Subjects Offered</label>
-                                    <input type="text" class="form-control" id="contact"
-                                        value="{{ $school_class->subject_offered }}">
+                                    @foreach ($subjects as $subject)
+                                        <div class="form-check">
+                                            <input type="checkbox" name="subject_offered[]" class="form-check-input"
+                                                id="{{ $subject->name }}" value="{{ $subject->id }}" {{ in_array($subject->id, $subjects_offered) ? "checked": ""}}>
+                                            <label class="form-check-label"
+                                                for="{{ $subject->name }}">{{ $subject->name }}</label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </fieldset>

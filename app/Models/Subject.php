@@ -12,4 +12,8 @@ class Subject extends Model
         'name',
         'assigned_teacher',
     ];
+
+    public function school_classes() {
+        return $this->belongsToMany(SchoolClass::class);
+    }
 }
