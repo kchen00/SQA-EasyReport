@@ -43,9 +43,14 @@
                             </div>
                             <div class="row">
                                 <div class="mb-3">
-                                    <label for="contact" class="form-label">Subjects Offered</label>
-                                    <input type="text" class="form-control" id="subject_offered" name="subject_offered"
-                                        value="" placeholder="Mathematics">
+                                    <p class="form-label">Subjects Offered</p>
+                                    @foreach ($subjects as $subject)
+                                    <div class="form-check">
+                                        <input type="checkbox" name="subject_offered[]" class="form-check-input" id="{{ $subject->name }}" value="{{ $subject->id }}">
+                                        <label class="form-check-label" for="{{ $subject->name }}">{{ $subject->name }}</label>
+                                    </div>
+                                    @endforeach
+
                                     @error('subject_offered')
                                         <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                     @enderror

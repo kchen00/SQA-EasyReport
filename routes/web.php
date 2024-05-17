@@ -26,6 +26,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\SubjectController;
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
@@ -77,4 +78,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/score/class/{class_id}/students/delete', [ScoreController::class, 'delete_score'])->name('score.student.delete');
     Route::get('/score/class/{class_id}/students/view_generate', [ScoreController::class, 'view_generate_score'])->name('score.student.view_generate');
     Route::get('/score/student/{student_id}/report/{generate}', [ScoreController::class, 'view_report'])->name('score.student.view_report');
+});
+
+// manage subjects routes
+// manage class routes
+Route::middleware('auth')->group(function () {
+    Route::get('/subject/list', [SubjectController::class, 'list'])->name('subject.list');
+    Route::get('/subject/add', [SubjectController::class, 'add'])->name('subject.add');
+    Route::post('/subject/store', [SubjectController::class, 'store'])->name('subject.store');
+    Route::get('/subject/view/{subject_id}', [SubjectController::class, 'view'])->name('subject.view');
+    Route::post('/subject/update/store/{subject_id}', [SubjectController::class, 'update_store'])->name('subject.update.store');
+    Route::delete('/subject/delete/{subject_id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
 });
