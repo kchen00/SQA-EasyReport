@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SchoolClass;
+use App\Models\Subjects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -43,7 +44,8 @@ class SchoolClassController extends Controller
 
     public function add()
     {
-        return view('pages.ManageClass.class_add');
+        $subjects = Subjects::all();
+        return view('pages.ManageClass.class_add')->with("subjects", $subjects);
     }
 
     public function store(Request $request)
@@ -52,7 +54,7 @@ class SchoolClassController extends Controller
             'name' => 'required|unique:school_classes,name',
             'capacity' => 'required|integer|min:20|max:30',
             'class_teacher' => 'required|string',
-            'subject_offered' => 'required|string',
+            'subject_offered' => 'required|array|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +66,7 @@ class SchoolClassController extends Controller
         $school_class->name = $request->input('name');
         $school_class->capacity = $request->input('capacity');
         $school_class->class_teacher = $request->input('class_teacher');
-        $school_class->subject_offered = $request->input('subject_offered');
+        $school_class->subject_offered = $request->input('subject_offered')[0];
         $school_class->save();
 
 
