@@ -48,7 +48,7 @@
                                 <div class="mb-3">
                                     <label for="birth" class="form-label">Class teacher</label>
                                     <input type="text" class="form-control" id="name"
-                                        value="{{ $school_class->class_teacher }}" placeholder="class name">
+                                        value="{{ $class_teacher->name }}" placeholder="class name">
                                 </div>
                             </div>
                             <div class="row">
