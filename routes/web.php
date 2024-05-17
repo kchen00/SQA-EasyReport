@@ -24,6 +24,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\SchoolClassController;
+use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\StudentController;
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -67,4 +68,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/school_class/update/store/{class_id}', [SchoolClassController::class, 'update_store'])->name('school_class.update.store');
     Route::post('/school_class/store', [SchoolClassController::class, 'store'])->name('school_class.store');
     Route::delete('/school_class/delete/{class_id}', [SchoolClassController::class, 'destroy'])->name('school_class.destroy');
+});
+
+// manage score routes
+Route::middleware('auth')->group(function () {
+    Route::get('/score/class/list', [ScoreController::class, 'list'])->name('score.class.list');
+    Route::get('/score/class/{class_id}/students/list', [ScoreController::class, 'list_score'])->name('score.student.list');
+    Route::get('/score/class/{class_id}/students/delete', [ScoreController::class, 'delete_score'])->name('score.student.delete');
+    Route::get('/score/class/{class_id}/students/view_generate', [ScoreController::class, 'view_generate_score'])->name('score.student.view_generate');
+    Route::get('/score/student/{student_id}/report/{generate}', [ScoreController::class, 'view_report'])->name('score.student.view_report');
 });
