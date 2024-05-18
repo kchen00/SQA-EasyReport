@@ -28,19 +28,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($subjects as $subject)
+                            @foreach ($subject_teacher as $data)
                                 <tr>
-                                    <td>{{ $subject->name }}</td>
-                                    <td>teacher_name</td>
+                                    <td>{{ $data["subject"]->name }}</td>
+                                    <td>
+                                        {{ $data["teacher"]->name }}
+                                    </td>
                                     <td>class_name</td>
                                     <td>
-                                        <a href="{{ route('subject.view', ['subject_id' => $subject->id]) }}" role="button"
+                                        <a href="{{ route('subject.view', ['subject_id' => $data["subject"]->id]) }}" role="button"
                                             class="btn btn-success rounded-pill">View</a>
                                         <a role="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal"
                                             data-bs-target="#delete_confirm"
-                                            onclick="confirm_delete('{{ $subject->name }}', '{{ $subject->id }}')">Delete</a>
-                                        <form method="POST" id="delete-form-{{ $subject->id }}"
-                                            action="{{ route('subject.destroy', ['subject_id' => $subject->id]) }}"
+                                            onclick="confirm_delete('{{ $data['subject']->name }}', '{{ $data["subject"]->id }}')">Delete</a>
+                                        <form method="POST" id="delete-form-{{ $data["subject"]->id }}"
+                                            action="{{ route('subject.destroy', ['subject_id' => $data["subject"]->id]) }}"
                                             style="display: none;">
                                             @csrf
                                             @method('DELETE')
@@ -52,7 +54,7 @@
                         <tfoot class="text-center">
                             <tr>
                                 <th scope="col" colspan="4">
-                                    {{ $subjects->onEachSide(5)->links() }}
+                                    {{ $items->onEachSide(5)->links() }}
                                 </th>
                             </tr>
                         </tfoot>

@@ -29,7 +29,6 @@ class SubjectsSeeder extends Seeder
         foreach ($subjects as $subject) {
             Subject::create([
                 'name' => $subject,
-                'assigned_teacher' => 2,
             ]);
         }
     }
