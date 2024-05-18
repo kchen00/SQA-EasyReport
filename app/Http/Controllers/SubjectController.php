@@ -15,13 +15,14 @@ class SubjectController extends Controller
 {
     public function list()
     {
-        $items = DB::table("subject_teacher")->paginate(5);
+        $items = DB::table("class_subject_teacher")->paginate(5);
         $subject_teacher = [];
 
         foreach($items as $item) {
             $teacher = User::find($item->user_id);
             $subject = Subject::find($item->subject_id);
-            array_push($subject_teacher, ["teacher"=>$teacher, "subject"=>$subject]);
+            $school_class = SchoolClass::find($item->schoolclass_id);
+            array_push($subject_teacher, ["teacher"=>$teacher, "subject"=>$subject, "schoolclass"=>$school_class]);
         }
 
         return view('pages.ManageSubject.subject_list')->with(["subject_teacher"=>$subject_teacher, "items"=>$items]);
@@ -30,7 +31,9 @@ class SubjectController extends Controller
     public function add()
     {
         $teachers = User::where("role", User::ROLE_TEACHER)->get();
-        return view('pages.ManageSubject.subject_add')->with(["teachers"=>$teachers]);
+        $schoolclass = SchoolClass::all();
+        $subjects = Subject::all();
+        return view('pages.ManageSubject.subject_add')->with(["teachers"=>$teachers, "schoolclass"=>$schoolclass, "subjects"=>$subjects]);
     }
 
     public function store(Request $request)
@@ -38,44 +41,58 @@ class SubjectController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'teacher' => 'required',
+            'schoolclass' => 'required',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Create a new student instance and save to database
-        $subject = new Subject();
-        $subject->name = $request->input('name');
-        $subject->save();
+        $subject = Subject::firstOrCreate(
+            ['name' => $request->input('name')]
+        );
 
-        $subject->teachers()->attach(["teacher_id"=>$request->input('teacher')], ['subject_id' => $subject->id, 'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
+        DB::table("class_subject_teacher")->insert([
+            "user_id" => $request->input('teacher'),
+            "subject_id" => $subject->id,
+            "schoolclass_id" =>  $request->input('schoolclass'),
+            "updated_at" => Carbon::now(),
+            "created_at" => Carbon::now()
+        ]);
 
 
         return redirect()->route('subject.add')->with('register_success', "Subject " . $subject->name . ' registered successfully.');
     }
 
-    public function view(int $subject_id)
+    public function view(int $subject_id, int $teacher_id, int $class_id)
     {
-        // Retrieve the student record from the database
-        $subject = Subject::find($subject_id);
-        $teachers = User::where("role", User::ROLE_TEACHER)->get();
+        $query = DB::table('class_subject_teacher')->where([
+            "subject_id" => $subject_id,
+            "user_id" => $teacher_id,
+            "schoolclass_id" => $class_id
+        ])->get()->first();
 
-        // Check if the subject record exists
-        if ($subject) {
-            return view('pages.ManageSubject.subject_view')->with(["subject"=>$subject, "teachers"=>$teachers]);
+
+        $record = [
+            "subject" => Subject::find($query->subject_id),
+            "teacher" => User::find($query->user_id),
+            "assigned_class" => SchoolClass::find($query->schoolclass_id),
+        ];
+
+        $teachers = User::where("role", User::ROLE_TEACHER)->get();
+        $schoolclass = SchoolClass::all();
+        if ($record) {
+            return view('pages.ManageSubject.subject_view')->with(["record"=>$record, "teachers"=>$teachers, "schoolclass"=>$schoolclass]);
         }
         abort(404, "subject not found");
     }
 
-    public function update_store(Request $request, int $subject_id)
+    public function update_store(Request $request, int $teacher_id, int $subject_id, int $class_id)
     {
-        // find the subject to update
-        $subject = Subject::find($subject_id);
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'teacher' => 'required',
+            'schoolclass' => 'required',
         ]);
 
 
@@ -83,13 +100,22 @@ class SubjectController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // Update the class information
+        // find the subject to update
+        // Update the subject name
+        $subject = Subject::find($subject_id);
         $subject->name = $request->input('name');
-        $subject->teachers()->sync($request->input("teacher"));
         $subject->save();
 
+        $update = DB::table("class_subject_teacher")->where([
+            "user_id" => $teacher_id,
+            "subject_id" => $subject->id,
+            "schoolclass_id" => $class_id
+        ])->update([
+            'user_id' => $request->input('teacher'),
+            'schoolclass_id' => $request->input('schoolclass')
+        ]);
 
-        return redirect()->route('subject.view', ['subject_id' => $subject_id])->with('edit_success', 'Subject updated successfully.');
+        return redirect()->route('subject.view', ['subject_id' => $subject_id, "teacher_id"=>$request->input("teacher"), "class_id"=>$request->input("schoolclass")])->with('edit_success', 'Subject updated successfully.');
     }
 
     public function destroy(int $subject_id)

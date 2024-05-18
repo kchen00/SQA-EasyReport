@@ -12,10 +12,16 @@ class ScoreController extends Controller
 {
     // list down all the class
     public function list() {
-        $teacher_classes = SchoolClass::all();
+        $subject_class_pivot = DB::table("class_subject_teacher")->where("user_id", Auth::user()->id)->get();
+        $subject_classes = [];
+
+        foreach($subject_class_pivot as $subject_class) {
+            array_push($subject_classes, SchoolClass::find($subject_class->schoolclass_id));
+        }
+
         $class_teacher_class = SchoolClass::where("class_teacher", Auth::user()->id)->first();
 
-        return view("pages.ManageScore.class_list")->with(["teacher_classes" => $teacher_classes, "class_teacher_class"=>$class_teacher_class]);
+        return view("pages.ManageScore.class_list")->with(["subject_classes" => $subject_classes, "class_teacher_class"=>$class_teacher_class]);
     }
 
     public function list_score(int $class_id) {

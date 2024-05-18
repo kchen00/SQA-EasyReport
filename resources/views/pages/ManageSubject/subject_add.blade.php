@@ -14,7 +14,12 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Subject Name</label>
                                         <input type="text" class="form-control" id="name" name="name"
-                                            placeholder="subject name">
+                                            placeholder="subject name" list="subject_list">
+                                        <datalist id="subject_list">
+                                            @foreach ($subjects as $subject)
+                                                <option>{{ $subject->name }}</option>
+                                            @endforeach
+                                        </datalist>
                                         @error('name')
                                             <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                         @enderror
@@ -27,11 +32,29 @@
                                         <label for="teacher" class="form-label">Teacher Assigned</label>
                                         <select class="form-control" id="teacher" name="teacher"
                                             placeholder="teacher name">
+                                            <option value="Assign one teacher to this subject" disabled selected hidden>Assign one teacher to this subject</option>
                                             @foreach ($teachers as $teacher)
                                                 <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('teacher')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <label for="teacher" class="form-label">Assigned Class</label>
+                                        <select class="form-control" id="schoolclass" name="schoolclass"
+                                            placeholder="teacher name">
+                                            <option value="Assign one class to this subject" disabled selected hidden>Assign one class to this subject</option>
+                                            @foreach ($schoolclass as $class_)
+                                                <option value="{{ $class_->id }}">{{ $class_->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('schoolclass')
                                             <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                         @enderror
                                     </div>

@@ -4,6 +4,7 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Manage Score'])
     <div class="container-fluid py-4">
         <div class="card p-4">
+            @if($subject_classes)
             <div class="row">
                 <h4>Student Class</h4>
             </div>
@@ -15,11 +16,11 @@
                     <div class="row m-auto">
                         <table class="table table-hover table-striped text-center">
                             <tbody>
-                                @foreach ($teacher_classes as $class)
+                                @foreach ($subject_classes as $class_)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('score.student.list', ['class_id' => $class->id]) }}">
-                                            {{ $class->name }}
+                                        <a href="{{ route('score.student.list', ['class_id' => $class_->id]) }}">
+                                            {{ $class_->name }}
                                         </a>
                                     </td>
                                 </tr>
@@ -28,6 +29,7 @@
                         </table>
                     </div>
                 </div>
+                @endif
                 @if($class_teacher_class)
                 <div class="row">
                     <div class="row">
