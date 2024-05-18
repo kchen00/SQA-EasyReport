@@ -28,7 +28,7 @@
                                         <select class="form-control" id="teacher" name="teacher"
                                             placeholder="teacher name" onchange="enable_form_submit()">
                                             @foreach ($teachers as $teacher)
-                                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                                <option value="{{ $teacher->id }}" {{ $teacher->id == 2 ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('teacher')
@@ -92,11 +92,11 @@
 
     <script>
         let original_subject_name = "{{ $subject->name }}";
-        let original_assigned_teacher_id = {{ $subject->assigned_teacher }};
+        let original_assigned_teacher_id = 2;
+
         function enable_form_submit() {
             let new_subject_name = $("#name").val();
             let new_assigned_teacher_id = parseInt($("#teacher").val());
-            console.log(new_subject_name);
 
             if(new_subject_name != original_subject_name || new_assigned_teacher_id != original_assigned_teacher_id){
                 $("#form_submit").removeClass("disabled")

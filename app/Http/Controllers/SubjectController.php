@@ -6,15 +6,25 @@ use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class SubjectController extends Controller
 {
     public function list()
     {
-        $subjects = Subject::paginate(5);
-        return view('pages.ManageSubject.subject_list')->with("subjects", $subjects);
+        $items = DB::table("subject_teacher")->paginate(5);
+        $subject_teacher = [];
+
+        foreach($items as $item) {
+            $teacher = User::find($item->user_id);
+            $subject = Subject::find($item->subject_id);
+            array_push($subject_teacher, ["teacher"=>$teacher, "subject"=>$subject]);
+        }
+
+        return view('pages.ManageSubject.subject_list')->with(["subject_teacher"=>$subject_teacher, "items"=>$items]);
     }
 
     public function add()
@@ -37,8 +47,9 @@ class SubjectController extends Controller
         // Create a new student instance and save to database
         $subject = new Subject();
         $subject->name = $request->input('name');
-        $subject->assigned_teacher = $request->input('teacher');
         $subject->save();
+
+        $subject->teachers()->attach(["teacher_id"=>$request->input('teacher')], ['subject_id' => $subject->id, 'created_at' => Carbon::now(),'updated_at' => Carbon::now()]);
 
 
         return redirect()->route('subject.add')->with('register_success', "Subject " . $subject->name . ' registered successfully.');
@@ -74,7 +85,7 @@ class SubjectController extends Controller
 
         // Update the class information
         $subject->name = $request->input('name');
-        $subject->assigned_teacher = $request->input('teacher');
+        $subject->teachers()->sync($request->input("teacher"));
         $subject->save();
 
 
