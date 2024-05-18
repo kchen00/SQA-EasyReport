@@ -86,7 +86,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/subject/list', [SubjectController::class, 'list'])->name('subject.list');
     Route::get('/subject/add', [SubjectController::class, 'add'])->name('subject.add');
     Route::post('/subject/store', [SubjectController::class, 'store'])->name('subject.store');
-    Route::get('/subject/view/{subject_id}', [SubjectController::class, 'view'])->name('subject.view');
-    Route::post('/subject/update/store/{subject_id}', [SubjectController::class, 'update_store'])->name('subject.update.store');
+    Route::get('/subject/view/{subject_id}/{teacher_id}/{class_id}', [SubjectController::class, 'view'])->name('subject.view');
+    Route::post('/subject/update/store/{teacher_id}/{subject_id}/{class_id}', [SubjectController::class, 'update_store'])->name('subject.update.store');
     Route::delete('/subject/delete/{subject_id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
 });

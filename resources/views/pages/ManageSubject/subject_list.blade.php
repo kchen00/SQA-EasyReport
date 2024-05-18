@@ -34,13 +34,15 @@
                                     <td>
                                         {{ $data["teacher"]->name }}
                                     </td>
-                                    <td>class_name</td>
                                     <td>
-                                        <a href="{{ route('subject.view', ['subject_id' => $data["subject"]->id]) }}" role="button"
+                                        {{ $data["schoolclass"]->name }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('subject.view', ['subject_id' => $data["subject"]->id, 'teacher_id' => $data['teacher']->id, 'class_id' => $data["schoolclass"]->id]) }}" role="button"
                                             class="btn btn-success rounded-pill">View</a>
                                         <a role="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal"
                                             data-bs-target="#delete_confirm"
-                                            onclick="confirm_delete('{{ $data['subject']->name }}', '{{ $data["subject"]->id }}')">Delete</a>
+                                            onclick="confirm_delete('{{ $data['subject']->name }}', '{{ $data['subject']->id }}')">Delete</a>
                                         <form method="POST" id="delete-form-{{ $data["subject"]->id }}"
                                             action="{{ route('subject.destroy', ['subject_id' => $data["subject"]->id]) }}"
                                             style="display: none;">
