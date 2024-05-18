@@ -28,7 +28,7 @@
                         </table>
                     </div>
                 </div>
-                @if($assigned_class)
+                @if($class_teacher_class)
                 <div class="row">
                     <div class="row">
                         <h6>My Class</h6>
@@ -38,8 +38,8 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <a href="{{ route('score.student.view_generate', ['class_id' => $assigned_class->id]) }}">
-                                            {{ $assigned_class->name }}
+                                        <a href="{{ route('score.student.view_generate', ['class_id' => $class_teacher_class->id]) }}">
+                                            {{ $class_teacher_class->name }}
                                         </a>
                                     </td>
                                 </tr>

@@ -4,22 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\SchoolClass;
 use App\Models\Student;
-use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ScoreController extends Controller
 {
     // list down all the class
     public function list() {
         $teacher_classes = SchoolClass::all();
-        $assigned_class = null;
-        $assigned_class_id = Teacher::where("user_id", Auth::id())->first()->assigned_class;
-        if($assigned_class_id) {
-            $assigned_class = SchoolClass::find($assigned_class_id);
-        }
+        $class_teacher_class = SchoolClass::where("class_teacher", Auth::user()->id)->first();
 
-        return view("pages.ManageScore.class_list")->with(["teacher_classes" => $teacher_classes, "assigned_class"=>$assigned_class]);
+        return view("pages.ManageScore.class_list")->with(["teacher_classes" => $teacher_classes, "class_teacher_class"=>$class_teacher_class]);
     }
 
     public function list_score(int $class_id) {
