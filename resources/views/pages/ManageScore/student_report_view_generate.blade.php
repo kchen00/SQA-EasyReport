@@ -20,8 +20,8 @@
                         </td>
                         <td>
                             <div class="d-flex justify-content-end m-auto">
-                                <a role="button" href="{{ route("score.student.view_report", ["student_id"=>$student->id, "generate"=>0]) }}" class="btn bg-white rounded-pill">View Report</a>
-                                <a role="button" href="{{ route("score.student.view_report", ["student_id"=>$student->id, "generate"=>1]) }}" class="btn bg-white rounded-pill">Generate Report</a>
+                                <a role="button" href="{{ route("score.report.student", ["student_id"=>$student->id, "generate"=>0]) }}" class="btn bg-white rounded-pill">View Report</a>
+                                <a role="button" href="{{ route("score.report.student.overall", ["student_id"=>$student->id, "generate"=>1]) }}" class="btn bg-white rounded-pill">Generate Report</a>
                             </div>
                         </td>
                     </tr>

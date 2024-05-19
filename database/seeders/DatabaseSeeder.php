@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Score;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,9 @@ class DatabaseSeeder extends Seeder
             SubjectsSeeder::class,
             StudentSeeder::class,
             ClassSubjectSeeder::class,
-            ClassSubjectTeacherSeeder::class
+            ClassSubjectTeacherSeeder::class,
+            ScoreSeeder::class,
+            GradeSeeder::class
         ]);
     }
 }

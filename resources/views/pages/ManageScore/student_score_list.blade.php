@@ -12,32 +12,36 @@
                     <h6>Student name</h6>
                 </div>
                 <div class="row m-auto">
-                    <table class="table table-hover table-striped text-center">
-                        <tbody>
-                            @foreach ($students as $student)
-                            <tr>
-                                <td>{{ $student->name }}</td>
-                                <td>
-                                    <div class="row">
-                                        <div class="col m-auto d-flex justify-content-end">
-                                            <form>
-                                                <input type="number" id="score_input" class="form-control text-center" placeholder="80" onchange="change_form_input_color(this)">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <div class="row m-auto">
-                        <div class="col">
-                            <a role="button" class="btn btn-info rounded-pill" onclick="history.back()">Back to class</a>
+                    <form action="{{ route("score.student.store", ["class_id"=>$school_class->id, "subject_id"=>$subject_id]) }}" method="POST">
+                        @csrf
+                        @foreach ($scores as $score)
+                        <div class="row row-cols-2">
+                            <div class="col text-center">
+                                <p>{{ $score["student"]->name }}</p>
+                            </div>
+                            <div class="col text-center">
+                                <input type="number" name="students[{{ $score['student']->id }}][id]" class="form-control text-center" value="{{ $score["student"]->id }}" hidden>
+                                <input type="number" name="students[{{ $score['student']->id }}][score]" class="form-control text-center" id="student_{{$score["student"]->id }}_score" placeholder="80" value="{{ $score["score"] ?  $score["score"]->score : ''}}" onchange="change_form_input_color(this)">
+                            </div>
+                            @error('students.' . $score['student']->id . '.score')
+                                <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <div class="col-5">
-                            <a role="button" id="save_button" class="btn btn-success rounded-pill d-flex justify-content-center">Save</a>
+                        @endforeach
+                        <div class="row">
+                            <div class="col">
+                                <a role="button" class="btn btn-info rounded-pill" onclick="history.back()">Back to class</a>
+                            </div>
+                            <div class="col text-end">
+                                <input type="submit" id="save_button" class="btn btn-success rounded-pill disabled" value="Save">
+                            </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col">
+                                <a role="button" class="btn btn-danger rounded-pill" href="{{ route('score.student.delete', ['class_id'=>$school_class->id]) }}">Delete Scores</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -74,8 +78,9 @@
     <script>
         // change form input to yellow
         function change_form_input_color(input_field) {
-            input_field.classList.add("bg-danger")
-            $("#save_button").text("Update")
+            input_field.style.backgroundColor = "yellow"
+            $("#save_button").removeClass("disabled")
+            $("#save_button").val("Update")
         }
     </script>
 @endsection

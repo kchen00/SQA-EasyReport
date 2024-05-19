@@ -40,7 +40,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <a href="{{ route('score.student.view_generate', ['class_id' => $class_teacher_class->id]) }}">
+                                        <a href="{{ route('report.student.view', ['class_id' => $class_teacher_class->id]) }}">
                                             {{ $class_teacher_class->name }}
                                         </a>
                                     </td>

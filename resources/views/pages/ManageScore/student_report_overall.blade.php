@@ -15,20 +15,24 @@
                 </div>
                 <table class="table table-hover table-striped">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                             <td>Subject</td>
-                            <td>Score</td>
-                            <td>Full marks</td>
+                            <td>Marks</td>
+                            <td>Grade</td>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($report["scores"] as $score)
-                        <tr>
+                        <tr class="text-center">
                             <td>{{ $score["subject"]->name }}</td>
                             <td>{{ $score["score"]->score }}</td>
-                            <td>{{ $score["score"]->full_marks }}</td>
+                            <td>{{ $score["grade"] }}</td>
                         </tr>
                         @endforeach
+                        <tr class="text-center">
+                            <td colspan="2">Average grade</td>
+                            <td>{{ $average_grade }}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
