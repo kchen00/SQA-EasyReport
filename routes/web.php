@@ -75,13 +75,15 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/score/class/list', [ScoreController::class, 'list'])->name('score.class.list');
     Route::get('/score/class/{class_id}/students/list', [ScoreController::class, 'list_score'])->name('score.student.list');
+    Route::post('/score/class/{class_id}/{subject_id}/store', [ScoreController::class, 'store_score'])->name('score.student.store');
     Route::get('/score/class/{class_id}/students/delete', [ScoreController::class, 'delete_score'])->name('score.student.delete');
-    Route::get('/score/class/{class_id}/students/view_generate', [ScoreController::class, 'view_generate_score'])->name('score.student.view_generate');
-    Route::get('/score/student/{student_id}/report/{generate}', [ScoreController::class, 'view_report'])->name('score.student.view_report');
+    Route::post('/score/class/{class_id}/students/delete/store', [ScoreController::class, 'delete_score_store'])->name('score.student.delete.store');
+    Route::get('/score/class/{class_id}/students/view_students', [ScoreController::class, 'view_students'])->name('report.student.view');
+    Route::get('/score/student/{student_id}/report', [ScoreController::class, 'view_report'])->name('score.report.student');
+    Route::get('/score/student/{student_id}/report/overall', [ScoreController::class, 'view_report_overall'])->name('score.report.student.overall');
 });
 
 // manage subjects routes
-// manage class routes
 Route::middleware('auth')->group(function () {
     Route::get('/subject/list', [SubjectController::class, 'list'])->name('subject.list');
     Route::get('/subject/add', [SubjectController::class, 'add'])->name('subject.add');

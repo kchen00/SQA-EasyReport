@@ -12,36 +12,31 @@
                     <h6>Student name</h6>
                 </div>
                 <div class="row m-auto">
-                    <table class="table table-hover table-striped text-center">
-                        <tbody>
-                            @foreach ($students as $student)
-                            <tr>
-                                <td>{{ $student->name }}</td>
-                                <td>
-                                    <form>
-                                        <fieldset disabled>
-                                            <input type="number" id="score_input" class="form-control" placeholder="80"
-                                                value="80" onchange="change_form_input_color(this)">
-                                        </fieldset>
-                                    </form>
-                                </td>
-                                <td style="display: none" id="check_box_col">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="">
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                            <tr>
-                                <td colspan="3">
-                                    <div class="d-flex justify-content-end m-auto">
-                                        <a role="button" class="btn btn-info rounded-pill" onclick="enable_checkbox()">Delete</a>
-                                        <a role="button" id="save_button" class="btn btn-danger rounded-pill" onclick="clear_all_input()">Delete all</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <form class="form" method="POST" action="{{ route('score.student.delete.store', ["class_id"=>$school_class->id]) }}">
+                        @csrf
+                        @foreach ($scores as $score)
+                        <div class="row">
+                            <div class="col">
+                                {{ $score["student"]->name }}
+                            </div>
+                            <div class="col text-center">
+                                <input type="number" name="students[{{ $score['student']->id }}][id]" class="form-control text-center" value="{{ $score["student"]->id }}" hidden>
+                                <input type="number" id="student_{{ $score['student']->id }}_score" name="students[{{ $score['student']->id }}][score]" class="form-control text-center" id="student_{{$score["student"]->id }}_score" placeholder="80" value="{{ $score["score"] ?  $score["score"]->score : ""}}" onchange="change_form_input_color(this)">
+                            </div>
+                            <div class="col-1" style="display: none" id="check_box_col">
+                                <div class="form-check">
+                                    <input class="form-check-input text-end" type="checkbox" value="" id="student_{{ $score['student']->id }}_selected" name="students[{{ $score['student']->id }}][selected]">
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <div class="row">
+                            <div class="d-flex justify-content-end m-auto">
+                                <input type="button" value="Delete" class="btn btn-info rounded-pill" onclick="enable_checkbox(this)">
+                                <input type="button" value="Delete all" class="btn btn-danger rounded-pill" onclick="clear_all_input(this)">
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -78,21 +73,44 @@
 
     <script>
         // clear all scores
-        function clear_all_input() {
-            var elements = document.querySelectorAll("#score_input");
+        function clear_all_input(delete_button) {
+            var elements = document.querySelectorAll('[id^="student_"][id$="_score"]');
             elements.forEach(function(element) {
                 element.value = ""
                 element.classList.remove("bg-danger")
             });
-            $("#score_delete_all_status").modal("show")
+
+            delete_button.type = "submit";
         }
 
         // enable check box col
-        function enable_checkbox() {
+        function enable_checkbox(delete_button) {
             var elements = document.querySelectorAll("#check_box_col");
             elements.forEach(function(element) {
                 element.style.display = ""
             });
+
+            delete_button.setAttribute('onclick', 'clear_selected(this)');
         }
+
+        // clear input that is selected
+        function clear_selected(delete_button) {
+            let checkboxes = document.querySelectorAll(".form-check-input");
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    // Get the corresponding student ID from the checkbox ID
+                    const studentId = checkbox.id.split('_')[1];
+                    // Select the corresponding score input field
+                    console.log('student_' + studentId + '_score');
+                    const scoreInput = document.getElementById('student_' + studentId + '_score');
+
+
+                    scoreInput.value = "";
+                };
+            });
+
+            delete_button.type = "submit";
+        };
     </script>
 @endsection
