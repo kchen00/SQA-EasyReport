@@ -9,10 +9,10 @@
                     <h6>Viewing students in the system</h6>
                 </div>
                 <div class="row">
-                    <form class="row row-cols-auto g-2 align-items-center">
+                    <form class="row row-cols-auto g-2 align-items-center" action="{{ route('student.search') }}">
                         <div class="col-10">
                             <div class="input-group">
-                                <input type="text" class="form-control rounded-pill" placeholder="Search student">
+                                <input type="text" class="form-control rounded-pill" placeholder="Search student" name="student_name">
                             </div>
                         </div>
                         <div class="col-2">
@@ -21,6 +21,7 @@
                     </form>
                 </div>
                 <div class="row">
+                    @if(count($students) > 0)
                     <table class="table table-striped table-hover text-center">
                         <thead>
                             <tr>
@@ -55,6 +56,11 @@
                             </tr>
                         </tfoot>
                     </table>
+                    @else
+                    <div class="alert alert-danger text-center">
+                        <h3 class="text-light">No results found</h3>
+                    </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="col w-100">

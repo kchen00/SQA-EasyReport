@@ -6,10 +6,10 @@
         <div class="card p-4">
             <div class="row align-items-center">
                 <div class="row">
-                    <form class="row row-cols-auto g-2 align-items-center">
+                    <form class="row row-cols-auto g-2 align-items-center" action="{{ route("subject.search") }}">
                         <div class="col-10">
                             <div class="input-group">
-                                <input type="text" class="form-control rounded-pill" placeholder="Search subject...">
+                                <input type="text" class="form-control rounded-pill" placeholder="Search subject..." name="subject_search">
                             </div>
                         </div>
                         <div class="col-2">
@@ -18,6 +18,7 @@
                     </form>
                 </div>
                 <div class="row">
+                    @if(count($subject_teacher) > 0)
                     <table class="table table-striped table-hover text-center">
                         <thead>
                             <tr>
@@ -61,6 +62,11 @@
                             </tr>
                         </tfoot>
                     </table>
+                    @else
+                    <div class="alert alert-danger text-center">
+                        <h3 class="text-light">No results found</h3>
+                    </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="col w-100">
