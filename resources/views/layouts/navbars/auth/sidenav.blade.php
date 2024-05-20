@@ -1,9 +1,9 @@
-<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
+<aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 no-print"
     id="sidenav-main">
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
             aria-hidden="true" id="iconSidenav"></i>
-        <a class="navbar-brand m-0" href="{{ route('home') }}" target="_blank">
+        <a class="navbar-brand m-0" href="{{ route('home') }}">
             <img src="{{ asset("./img/icon.png") }}" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-1 font-weight-bold">EasyReport</span>
         </a>
@@ -29,7 +29,19 @@
                     </div>
                     <span class="nav-link-text ms-1">Profile</span>
                 </a>
-            @endif
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder">Manage Score</h6>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Str::startsWith(Route::currentRouteName(), 'score') ? 'active' : '' }}" href="{{ route('score.class.list') }}">
+                        <div
+                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="bi bi-eye text-info text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">View Score</span>
+                    </a>
+                </li>
+            @else
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder">Manage Students</h6>
             </li>
@@ -55,7 +67,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder">Register Teachers</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('allteacher') }}">
+                <a class="nav-link {{ Route::currentRouteName() == 'allteacher' ? 'active' : '' }}" href="{{ route('allteacher') }} ">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="bi bi-eye text-dark text-sm opacity-10"></i>
@@ -87,8 +99,8 @@
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder">Manage Subject</h6>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route("subject.list") }}">
+            <li class="nav-item ">
+                <a class="nav-link {{ Route::currentRouteName() == 'subject.list' ? 'active' : '' }}" href="{{ route("subject.list") }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="bi bi-eye text-success text-sm opacity-10"></i>
@@ -96,18 +108,7 @@
                     <span class="nav-link-text ms-1">View Subject</span>
                 </a>
             </li>
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder">Manage Score</h6>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('score.class.list') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-eye text-info text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">View Score</span>
-                </a>
-            </li>
+            @endif
         </ul>
     </div>
 </aside>
