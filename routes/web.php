@@ -20,7 +20,6 @@ Route::get('/', function () {
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\SchoolClassController;
@@ -51,7 +50,7 @@ Route::get('/', function () {
 
 
 // manage students routes
-Route::middleware('auth')->group(function () {
+Route::middleware(["auth", "role:admin"])->group(function () {
     Route::prefix('student')->group(function () {
         Route::get('/list', [StudentController::class, 'list'])->name('student.list');
         Route::get('/list/search', [StudentController::class, 'search'])->name('student.search');
@@ -63,7 +62,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // manage class routes
-Route::middleware('auth')->group(function () {
+Route::middleware(["auth", "role:admin"])->group(function () {
     Route::get('/school_class/list', [SchoolClassController::class, 'list'])->name('school_class.list');
     Route::get('/school_class/list/search', [SchoolClassController::class, 'search'])->name('school_class.search');
     Route::get('/school_class/view/{class_id}', [SchoolClassController::class, 'view'])->name('school_class.view');
@@ -75,7 +74,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // manage score routes
-Route::middleware('auth')->group(function () {
+Route::middleware(["auth", "role:teacher"])->group(function () {
     Route::get('/score/class/list', [ScoreController::class, 'list'])->name('score.class.list');
     Route::get('/score/class/{class_id}/students/list', [ScoreController::class, 'list_score'])->name('score.student.list');
     Route::post('/score/class/{class_id}/{subject_id}/store', [ScoreController::class, 'store_score'])->name('score.student.store');
@@ -87,7 +86,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // manage subjects routes
-Route::middleware('auth')->group(function () {
+Route::middleware(["auth", "role:admin"])->group(function () {
     Route::get('/subject/list', [SubjectController::class, 'list'])->name('subject.list');
     Route::get('/subject/search', [SubjectController::class, 'search'])->name('subject.search');
     Route::get('/subject/add', [SubjectController::class, 'add'])->name('subject.add');
@@ -98,12 +97,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // manage teacher
-Route::middleware('auth')->group(function() {
+Route::middleware(["auth", "role:admin"])->group(function() {
     Route::get('/all_teacher', [TeacherController::class, 'teacherlist'])->name('allteacher');
     Route::get('/view_teacher/{id}', [TeacherController::class, 'viewteacher'])->name('viewteacher');
     Route::get('/add_teacher', [TeacherController::class, 'addteacher'])->name('addteacher');
     Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
-
     Route::post('/all_teacher', [TeacherController::class, 'searchName'])->name('teacher.search');
     Route::post('/add_teacher', [TeacherController::class, 'registerTeacher'])->name('addteacher.create');
     Route::delete('/all_teacher/{id}', [TeacherController::class, 'deleteTeacher'])->name('allteacher.delete');
