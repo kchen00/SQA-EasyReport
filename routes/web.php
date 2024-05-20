@@ -97,7 +97,7 @@ Route::middleware(["auth", "role:admin"])->group(function () {
 });
 
 // manage teacher
-Route::middleware(["auth", "role:admin"])->group(function() {
+Route::middleware("auth")->group(function() {
     Route::get('/all_teacher', [TeacherController::class, 'teacherlist'])->name('allteacher');
     Route::get('/view_teacher/{id}', [TeacherController::class, 'viewteacher'])->name('viewteacher');
     Route::get('/add_teacher', [TeacherController::class, 'addteacher'])->name('addteacher');
