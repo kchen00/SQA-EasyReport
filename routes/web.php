@@ -97,13 +97,16 @@ Route::middleware(["auth", "role:admin"])->group(function () {
 });
 
 // manage teacher
-Route::middleware("auth")->group(function() {
+Route::middleware(["auth", "role:admin"])->group(function() {
     Route::get('/all_teacher', [TeacherController::class, 'teacherlist'])->name('allteacher');
     Route::get('/view_teacher/{id}', [TeacherController::class, 'viewteacher'])->name('viewteacher');
     Route::get('/add_teacher', [TeacherController::class, 'addteacher'])->name('addteacher');
-    Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
     Route::post('/all_teacher', [TeacherController::class, 'searchName'])->name('teacher.search');
     Route::post('/add_teacher', [TeacherController::class, 'registerTeacher'])->name('addteacher.create');
     Route::delete('/all_teacher/{id}', [TeacherController::class, 'deleteTeacher'])->name('allteacher.delete');
+});
+
+Route::middleware(["auth", "role:teacher"])->group(function() {
+    Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
     Route::put('/profile/{id}', [TeacherController::class, 'profileUpdate'])->name('profile.update');
 });
