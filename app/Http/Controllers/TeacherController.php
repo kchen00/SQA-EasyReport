@@ -70,7 +70,7 @@ class TeacherController extends Controller
     public function profileUpdate(Request $request, $id) {
         $teacher = User::findOrFail($id);
 
-        $validator = Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'name' => 'required|string|max:100',
             'ic' => 'required|string|size:12',
             'email' => 'required|string|email|max:100|unique:users,email,' . $teacher->id,
@@ -82,10 +82,6 @@ class TeacherController extends Controller
             'new_password' => 'nullable|string|min:8',
             'confirm_password' => 'nullable|string|min:8|same:new_password',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($request)->withInput();
-        }
 
         if ($request->filled('new_password')) {
             $teacher->password = $request['new_password'];
