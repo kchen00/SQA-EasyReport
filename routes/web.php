@@ -50,7 +50,7 @@ Route::get('/', function () {
 });
 
 
-// manage account routes
+// manage students routes
 Route::middleware('auth')->group(function () {
     Route::prefix('student')->group(function () {
         Route::get('/list', [StudentController::class, 'list'])->name('student.list');

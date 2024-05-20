@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
 {
@@ -34,7 +35,7 @@ class TeacherController extends Controller
 
     public function registerTeacher(Request $request) {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
             'ic' => 'required|string|size:12',
             'email' => 'required|string|email|max:100|unique:users,email',
@@ -44,6 +45,10 @@ class TeacherController extends Controller
             'gender' => 'required|string|in:Men,Women',
             'address' => 'required|string|max:150',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($request)->withInput();
+        }
 
         $teacher = User::create([
             'name' => $request->name,
@@ -64,8 +69,8 @@ class TeacherController extends Controller
 
     public function profileUpdate(Request $request, $id) {
         $teacher = User::findOrFail($id);
-    
-        $validated = $request->validate([
+
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
             'ic' => 'required|string|size:12',
             'email' => 'required|string|email|max:100|unique:users,email,' . $teacher->id,
@@ -78,27 +83,35 @@ class TeacherController extends Controller
             'confirm_password' => 'nullable|string|min:8|same:new_password',
         ]);
 
-        if ($request->filled('new_password')) {
-            $teacher->password = $validated['new_password'];
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($request)->withInput();
         }
-    
+
+        if ($request->filled('new_password')) {
+            $teacher->password = $request['new_password'];
+        }
+
         $teacher->update([
-            'name' => $validated['name'],
-            'ic' => $validated['ic'],
-            'email' => $validated['email'],
-            'age' => (int) $validated['age'],
-            'contact' => $validated['contact'],
-            'gender' => $validated['gender'],
-            'address' => $validated['address'],
+            'name' => $request['name'],
+            'ic' => $request['ic'],
+            'email' => $request['email'],
+            'age' => (int) $request['age'],
+            'contact' => $request['contact'],
+            'gender' => $request['gender'],
+            'address' => $request['address'],
         ]);
-    
+
         return redirect()->route('profile')->with('update_success', true);
     }
 
     public function searchName(Request $request) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'search_name' => 'required|string|max:100',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($request)->withInput();
+        }
 
         $teachers = User::where('role', 'teacher')->where('name', 'LIKE', '%' . $request->search_name . '%')->paginate(10);
 
@@ -108,7 +121,7 @@ class TeacherController extends Controller
             return $this->teacherlist();
         }
     }
-    
+
 
     public function deleteTeacher($id) {
         $teacher = User::findOrFail($id);

@@ -17,12 +17,18 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" required>
+                                    @error('name')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
                                     <label for="ic" class="form-label">Identity Card Number</label>
                                     <input type="text" class="form-control" name="ic" required>
+                                    @error('ic')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -31,12 +37,18 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Email</label>
                                     <input type="text" class="form-control" name="email" required>
+                                    @error('email')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
                                     <label for="ic" class="form-label">Password</label>
                                     <input type="password" class="form-control" name="password" required>
+                                    @error('password')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                                 <div class="form-check d-flex justify-content-end" style="margin-top: -15px;">
                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">&nbsp;
@@ -51,12 +63,18 @@
                                 <div class="mb-3">
                                     <label for="contact" class="form-label">Age</label>
                                     <input type="text" class="form-control" name="age" required>
+                                    @error('age')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="mb-3">
                                     <label for="ic" class="form-label">Contact</label>
                                     <input type="text" class="form-control" name="contact" required>
+                                    @error('contact')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -69,6 +87,9 @@
                                         <option value="Men">Men</option>
                                         <option value="Women">Women</option>
                                     </select>
+                                    @error('gender')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -76,6 +97,9 @@
                             <div class="mb-3">
                                 <label for="contact" class="form-label">Address</label>
                                 <input type="text" class="form-control" name="address" required>
+                                @error('address')
+                                    <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -137,7 +161,7 @@
             $("#flexCheckChecked").change(function() {
                 var passwordInput = $('input[name="password"]');
                 var icInput = $('input[name="ic"]');
-                
+
                 if ($(this).is(":checked")) {
                     passwordInput.val(icInput.val());
                 } else {
