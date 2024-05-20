@@ -10,12 +10,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Database\Seeders\SubjectsSeeder;
 
 class SubjectController extends Controller
 {
     public function list()
     {
         $items = DB::table("class_subject_teacher")->paginate(5);
+        $subject_teacher = [];
+
+        foreach($items as $item) {
+            $teacher = User::find($item->user_id);
+            $subject = Subject::find($item->subject_id);
+            $school_class = SchoolClass::find($item->schoolclass_id);
+            array_push($subject_teacher, ["teacher"=>$teacher, "subject"=>$subject, "schoolclass"=>$school_class]);
+        }
+
+        return view('pages.ManageSubject.subject_list')->with(["subject_teacher"=>$subject_teacher, "items"=>$items]);
+    }
+
+    public function search(Request $request)
+    {
+        $subjects = Subject::where("name", "LIKE", "%{$request->subject_search}%")->pluck('id');
+        $items = DB::table("class_subject_teacher")->whereIn('subject_id', $subjects)->paginate(5);
         $subject_teacher = [];
 
         foreach($items as $item) {

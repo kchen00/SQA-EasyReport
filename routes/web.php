@@ -54,6 +54,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::prefix('student')->group(function () {
         Route::get('/list', [StudentController::class, 'list'])->name('student.list');
+        Route::get('/list/search', [StudentController::class, 'search'])->name('student.search');
         Route::get('/view/{student_id}', [StudentController::class, 'view'])->name('student.view');
         Route::get('/add', [StudentController::class, 'add'])->name('student.add');
         Route::post('/store', [StudentController::class, 'store'])->name('student.store');
@@ -64,6 +65,7 @@ Route::middleware('auth')->group(function () {
 // manage class routes
 Route::middleware('auth')->group(function () {
     Route::get('/school_class/list', [SchoolClassController::class, 'list'])->name('school_class.list');
+    Route::get('/school_class/list/search', [SchoolClassController::class, 'search'])->name('school_class.search');
     Route::get('/school_class/view/{class_id}', [SchoolClassController::class, 'view'])->name('school_class.view');
     Route::get('/school_class/add', [SchoolClassController::class, 'add'])->name('school_class.add');
     Route::get('/school_class/update/{class_id}', [SchoolClassController::class, 'update'])->name('school_class.update');
@@ -87,6 +89,7 @@ Route::middleware('auth')->group(function () {
 // manage subjects routes
 Route::middleware('auth')->group(function () {
     Route::get('/subject/list', [SubjectController::class, 'list'])->name('subject.list');
+    Route::get('/subject/search', [SubjectController::class, 'search'])->name('subject.search');
     Route::get('/subject/add', [SubjectController::class, 'add'])->name('subject.add');
     Route::post('/subject/store', [SubjectController::class, 'store'])->name('subject.store');
     Route::get('/subject/view/{subject_id}/{teacher_id}/{class_id}', [SubjectController::class, 'view'])->name('subject.view');

@@ -14,6 +14,11 @@ class StudentController extends Controller
         return view('pages.ManageAccount.student_list')->with('students', $students);
     }
 
+    public function search(Request $request) {
+        $students = Student::where("name", "LIKE", "%{$request->student_name}%")->paginate(10);
+        return view('pages.ManageAccount.student_list')->with('students', $students);
+    }
+
     public function view(int $student_id)
     {
         // Retrieve the student record from the database

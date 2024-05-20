@@ -18,6 +18,12 @@ class SchoolClassController extends Controller
         return view('pages.ManageClass.class_list')->with('classes', $classes);
     }
 
+    public function search(Request $request)
+    {
+        $classes = SchoolClass::where("name", "LIKE", "%{$request->class_name}%")->paginate(10);
+        return view('pages.ManageClass.class_list')->with('classes', $classes);
+    }
+
     public function view(int $class_id)
     {
         // Retrieve the class record from the database
