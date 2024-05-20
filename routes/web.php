@@ -27,6 +27,7 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
 
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
@@ -39,8 +40,8 @@ Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('
 Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
-    Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    // Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+    // Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
 
@@ -91,4 +92,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/subject/view/{subject_id}/{teacher_id}/{class_id}', [SubjectController::class, 'view'])->name('subject.view');
     Route::post('/subject/update/store/{teacher_id}/{subject_id}/{class_id}', [SubjectController::class, 'update_store'])->name('subject.update.store');
     Route::delete('/subject/delete/{subject_id}', [SubjectController::class, 'destroy'])->name('subject.destroy');
+});
+
+// manage teacher
+Route::middleware('auth')->group(function() {
+    Route::get('/all_teacher', [TeacherController::class, 'teacherlist'])->name('allteacher');
+    Route::get('/view_teacher/{id}', [TeacherController::class, 'viewteacher'])->name('viewteacher');
+    Route::get('/add_teacher', [TeacherController::class, 'addteacher'])->name('addteacher');
+    Route::get('/profile', [TeacherController::class, 'profile'])->name('profile');
+
+    Route::post('/all_teacher', [TeacherController::class, 'searchName'])->name('teacher.search');
+    Route::post('/add_teacher', [TeacherController::class, 'registerTeacher'])->name('addteacher.create');
+    Route::delete('/all_teacher/{id}', [TeacherController::class, 'deleteTeacher'])->name('allteacher.delete');
+    Route::put('/profile/{id}', [TeacherController::class, 'profileUpdate'])->name('profile.update');
 });
