@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SchoolClass;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +35,8 @@ class StudentController extends Controller
 
     public function add()
     {
-        return view('pages.ManageAccount.student_add');
+        $school_class = SchoolClass::all();
+        return view('pages.ManageAccount.student_add')->with("school_class", $school_class);
     }
 
     public function store(Request $request)
@@ -44,6 +46,7 @@ class StudentController extends Controller
             'gender' => 'required|in:male,female',
             'birth' => 'required|date',
             'contact' => 'required|string|max:12',
+            "school_class" => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -56,6 +59,7 @@ class StudentController extends Controller
         $student->gender = $request->input('gender');
         $student->date_of_birth = $request->input('birth');
         $student->contact_information = $request->input('contact');
+        $student->school_class = $request->input('school_class');
         $student->save();
 
 

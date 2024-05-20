@@ -45,8 +45,22 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="contact" class="form-label">Contact information</label>
-                                    <input type="text" class="form-control" id="contact" name="contact">
+                                    <input type="text" class="form-control" id="contact" name="contact" placeholder="0123456789">
                                     @error('contact') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="contact" class="form-label">Class</label>
+                                    <select id="school_class" class="form-select" name="school_class" value="selected">
+                                        <option value=" Assign a class to this student" disabled hidden selected>
+                                            Assign a class to this student
+                                        </option>
+                                        @foreach($school_class as $class_)
+                                        <option value="{{ $class_->id }}">{{ $class_->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('school_class') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>
                             </div>
                             <div class="row text-center">
