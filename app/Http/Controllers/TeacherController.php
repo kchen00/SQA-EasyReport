@@ -84,7 +84,7 @@ class TeacherController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($request)->withInput();
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         if ($request->filled('new_password')) {
